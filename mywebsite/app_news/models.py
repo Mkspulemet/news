@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class PublishedManager(models.Manager):
@@ -35,3 +36,6 @@ class Article(models.Model):
 
     def __str__(self):
         return self.headline
+
+    def get_absolute_url(self):
+        return reverse('news: aricle_detail', args=[self.id])
