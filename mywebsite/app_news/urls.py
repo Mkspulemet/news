@@ -5,5 +5,5 @@ app_name = 'news'
 
 urlpatterns = [
     path('', article_list, name='article_list'),
-    path('<int:id>/', article_detail, name='article_detail')
+    path('article/<int:id>/', article_detail, name='article_detail'),
 ]

@@ -8,6 +8,6 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = ["headline", "reporter", "publish"]
     list_filter = ["publish", "reporter"]
     search_fields = ["headline", "content"]
-    # raw_id_fields = ["reporter"]
+    raw_id_fields = ["reporter"]
     date_hierarchy = "publish"
     ordering = ["publish"]
