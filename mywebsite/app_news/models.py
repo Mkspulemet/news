@@ -24,7 +24,8 @@ class Article(models.Model):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
 
-    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
+    status = models.CharField(max_length=2, choices=Status.choices,
+                              default=Status.DRAFT)
     objects = models.Manager()
     published = PublishedManager()
 
@@ -35,14 +36,15 @@ class Article(models.Model):
         ]
 
     def get_absolute_url(self):
-        return reverse("app_news:article_detail",
-                       args=[
-                           self.publish.year,
-                           self.publish.month,
-                           self.publish.day,
-                           self.slug,
-                       ],
-                       )
+        return reverse(
+            "app_news:article_detail",
+            args=[
+                self.publish.year,
+                self.publish.month,
+                self.publish.day,
+                self.slug,
+            ],
+        )
 
     def __str__(self):
         return self.headline

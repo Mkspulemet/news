@@ -14,4 +14,5 @@ Published {{ article.publish }} by {{ article.reporter}}
 </p>
 {{ article.content|truncatewords:30|linebreaks }}
 {% endfor%}
+{% include "pagination.html" with page=page_obj %}
 {% endblock%}

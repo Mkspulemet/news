@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('news/', include('app_news.urls', namespace='app_news'))
+    path('news/', include('app_news.urls', namespace='app_news')),
 ]
