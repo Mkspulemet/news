@@ -17,7 +17,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=200, unique_for_date='publish')
     content = models.TextField()
     reporter = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="news_articles"
+        User, on_delete=models.CASCADE, related_name='news_articles'
     )
 
     class Status(models.TextChoices):
@@ -30,14 +30,14 @@ class Article(models.Model):
     published = PublishedManager()
 
     class Meta:
-        ordering = ["-publish"]
+        ordering = ['-publish']
         indexes = [
-            models.Index(fields=["-publish"]),
+            models.Index(fields=['-publish']),
         ]
 
     def get_absolute_url(self):
         return reverse(
-            "app_news:article_detail",
+            'app_news:article_detail',
             args=[
                 self.publish.year,
                 self.publish.month,

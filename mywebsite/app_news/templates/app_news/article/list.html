@@ -6,12 +6,12 @@
 {% for article in articles %}
 <h2>
     <a href="{{ article.get_absolute_url }}">
-{{ article.headline }}
-</a>
+        {{ article.headline }}
+    </a>
 </h2>
-<p class="pdate">
-Published {{ article.publish }} by {{ article.reporter}}
-</p>
+    <p class="pdate">
+        Published {{ article.publish }} by {{ article.reporter}}
+    </p>
 {{ article.content|truncatewords:30|linebreaks }}
 {% endfor%}
 {% include "pagination.html" with page=page_obj %}

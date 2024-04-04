@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+import configparser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p_b4#44*(z%qxoc_t=#uc0ui$e)g6teqg75inu0iv5k8*tpjfs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -122,3 +123,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+conf = configparser.ConfigParser()
+conf.read(f'{BASE_DIR}/configs.cfg')
+
+EMAIL_HOST = conf['gmail']['EMAIL_HOST']
+EMAIL_PORT = conf['gmail']['EMAIL_PORT']
+EMAIL_HOST_USER = conf['gmail']['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = conf['gmail']['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = conf['gmail']['EMAIL_USE_TLS']
