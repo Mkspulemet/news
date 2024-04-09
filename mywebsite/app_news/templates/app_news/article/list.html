@@ -10,7 +10,7 @@
     </a>
 </h2>
     <p class="pdate">
-        Published {{ article.publish }} by {{ article.reporter}}
+       Tags: {{ article.tags.all|join:", " }}
     </p>
 {{ article.content|truncatewords:30|linebreaks }}
 {% endfor%}
