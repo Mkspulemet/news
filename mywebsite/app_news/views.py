@@ -1,31 +1,41 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView
-from app_news.models import Article, Comment
+# from django.views.generic import ListView
+from app_news.models import Article
+from taggit.models import Tag
 from app_news.forms import EmailPostForm, CommentForm
 from django.core.mail import send_mail
 from mywebsite.settings import EMAIL_HOST_USER
 
 
-class ArticleListView(ListView):
-    queryset = Article.published.all()
-    context_object_name = 'articles'
-    paginate_by = 2
-    template_name = 'app_news/article/list.html'
+# class ArticleListView(ListView):
+#     queryset = Article.published.all()
+#     context_object_name = 'articles'
+#     paginate_by = 2
+#     template_name = 'app_news/article/list.html'
 
 
-# def article_list(request):
-#     articles = Article.published.all()
-#     paginator = Paginator(articles, 2)
-#     page_number = request.GET.get('page', 1)
-#     try:
-#         articles = paginator.get_page(page_number)
-#     except EmptyPage:
-#         articles = paginator.page(paginator.num_pages)
-#     except PageNotAnInteger:
-#         articles = paginator.page(1)
-#     return render(request, 'app_news/article/list.html', {'articles': articles})
+def article_list(request, tag_slug=None):
+    articles = Article.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        articles = articles.filter(tags__in=[tag])
+
+    paginator = Paginator(articles, 2)
+    page_number = request.GET.get('page', 1)
+    try:
+        articles = paginator.get_page(page_number)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    return render(
+        request,
+        'app_news/article/list.html',
+        {'articles': articles, 'tag': tag}
+    )
 
 
 def article_detail(request, year, month, day, article_slg):
