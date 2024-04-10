@@ -49,8 +49,10 @@ def article_share(request, article_id):
     sent = False
     article = get_object_or_404(Article, id=article_id,
                                 status=Article.Status.PUBLISHED)
+
     if request.method == 'POST':
         form = EmailPostForm(request.POST)
+
         if form.is_valid():
             cd = form.cleaned_data
             article_url = request.build_absolute_uri(article.get_absolute_url())
@@ -67,8 +69,10 @@ def article_share(request, article_id):
     else:
         form = EmailPostForm()
     return render(
-        request, 'app_news/article/share.html',
-        {'article': article, 'form': form, 'sent': sent}, )
+        request,
+        'app_news/article/share.html',
+        {'article': article, 'form': form, 'sent': sent},
+    )
 
 
 @require_POST
