@@ -6,8 +6,8 @@ body {
 
 /* Style the header */
 header {
-    /* background: #181818; */
-    background: #000000;
+     background: #6c757d;
+    /*background: #000000;*/
     padding: 30px;
     text-align: center;
     font-size: 45px;
@@ -26,20 +26,20 @@ section {
 /* Style the articles */
 article {
     flex: 2;
-    background: #000000;
+    background: #6c757d;
     padding: 30px;
 }
 
 /* Style the navigation menu */
 nav {
     flex: 1;
-    background: #2779a7;
+    background: #6c757d;
     padding: 30px;
     font-size: large;
 }
 
 nav ul {
-    color: #ffffff;
+    color: black;
     padding: 30px;
 }
 
@@ -72,7 +72,7 @@ a:active {
 
 /* Style the footer */
 footer {
-    background-color: #000000;
+    background-color: #6c757d;
     padding: 45px;
     text-align: center;
     color: #49c5b6;
