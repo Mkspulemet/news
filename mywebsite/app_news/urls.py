@@ -1,5 +1,5 @@
 from django.urls import path
-from app_news.views import article_detail, article_share, article_comment, article_list
+from app_news.views import article_detail, article_share, article_comment, article_list, article_search
 from app_news.feeds import LatestArticleFeed
 
 
@@ -16,5 +16,6 @@ urlpatterns = [
     ),
     path('<int:article_id>/share/', article_share, name='article_share'),
     path('<int:article_id>/comment/', article_comment, name='article_comment'),
-    path('rss/', LatestArticleFeed(), name='article_rss')
+    path('rss/', LatestArticleFeed(), name='article_rss'),
+    path('search/', article_search, name='article_search'),
 ]

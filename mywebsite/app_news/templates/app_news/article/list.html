@@ -27,6 +27,6 @@
         Published {{ aricle.publish }} by {{ article.reporter }}
     </p>
 {{ article.content|markdown|truncatewords_html:30|linebreaks }}
-{% endfor%}
+{% endfor %}
 {% include "pagination.html" with page=articles %}
-{% endblock%}
+{% endblock %}
