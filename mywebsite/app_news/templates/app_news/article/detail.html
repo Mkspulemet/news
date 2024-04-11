@@ -1,11 +1,12 @@
 {% extends "app_news/base.html" %}
+{% load news_tags %}
 {% block title %} {{ article.headline }} {% endblock %}
 {% block content %}
 <h1>{{ article.headline }}</h1>
 <p class="pdate">
     Published {{ article.publish }} by {{ article.reporter }}
 </p>
-{{ article.content }}
+{{ article.content|markdown }}
 <a href="{% url 'news:article_share' article.id %}">
     Share this news!
 </a>
