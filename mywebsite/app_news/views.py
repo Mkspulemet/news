@@ -7,7 +7,8 @@ from taggit.models import Tag
 from app_news.forms import EmailPostForm, CommentForm, SearchForm
 from django.core.mail import send_mail
 from django.db.models import Count
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import TrigramSimilarity
 from mywebsite.settings import EMAIL_HOST_USER
 
 
@@ -126,10 +127,15 @@ def article_search(request):
 
         if form.is_valid():
             query = form.cleaned_data['query']
+            # search_vector = SearchVector('headline', 'content', config='russian')
+            # search_query = SearchQuery(query, config='russian')
             results = Article.published.annotate(
-                search=SearchVector('headline', 'content')
-            ).filter(search=query)
-            print(results)
+                similarity=TrigramSimilarity('headline', query)
+                # search=search_vector,
+                # rank=SearchRank(search_vector, search_query)
+            )\
+                .filter(similarity__gt=0.1)\
+                .order_by('-similarity')
 
     return render(
         request,
