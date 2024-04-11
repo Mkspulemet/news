@@ -6,6 +6,7 @@ from app_news.models import Article
 from taggit.models import Tag
 from app_news.forms import EmailPostForm, CommentForm
 from django.core.mail import send_mail
+from django.db.models import Count
 from mywebsite.settings import EMAIL_HOST_USER
 
 
@@ -49,9 +50,21 @@ def article_detail(request, year, month, day, article_slg):
     )
     comments = article.comments.filter(active=True)
     form = CommentForm()
+    article_tags_ids = article.tags.values_list('id', flat=True)
+    similar_articles = Article.published.filter(tags__in=article_tags_ids).exclude(
+        id=article.id)
+    similar_articles = similar_articles.annotate(same_tags=Count('tags')).order_by(
+        '-same_tags', '-publish'
+    )[:2]
     return render(
-        request, 'app_news/article/detail.html',
-        {'article': article, 'comments': comments, 'form': form}
+        request,
+        'app_news/article/detail.html',
+        {
+            'article': article,
+            'comments': comments,
+            'form': form,
+            'similar_articles': similar_articles
+        }
     )
 
 
