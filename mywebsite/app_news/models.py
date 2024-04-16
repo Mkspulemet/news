@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 class PublishedManager(models.Manager):
@@ -10,39 +11,63 @@ class PublishedManager(models.Manager):
 
 
 class Article(models.Model):
-    publish = models.DateField(default=timezone.now)
+    publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     headline = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique_for_date='publish')
     content = models.TextField()
     reporter = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="news_articles"
+        User, on_delete=models.CASCADE, related_name='news_articles'
     )
 
     class Status(models.TextChoices):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
+    tags = TaggableManager()
 
-    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
+    status = models.CharField(max_length=2, choices=Status.choices,
+                              default=Status.DRAFT)
     objects = models.Manager()
     published = PublishedManager()
 
     class Meta:
-        ordering = ["-publish"]
+        ordering = ['-publish']
         indexes = [
-            models.Index(fields=["-publish"]),
+            models.Index(fields=['-publish']),
         ]
 
     def get_absolute_url(self):
-        return reverse("app_news:article_detail",
-                       args=[
-                           self.publish.year,
-                           self.publish.month,
-                           self.publish.day,
-                           self.slug,
-                       ],
-                       )
+        return reverse(
+            'app_news:article_detail',
+            args=[
+                self.publish.year,
+                self.publish.month,
+                self.publish.day,
+                self.slug,
+            ],
+        )
 
     def __str__(self):
         return self.headline
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name='comments'
+    )
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['created']
+        indexes = [
+            models.Index(fields=['created']),
+        ]
+
+    def __str__(self):
+        return f'Comment by {self.name} on {self.article}'

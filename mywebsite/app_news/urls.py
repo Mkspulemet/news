@@ -1,9 +1,21 @@
 from django.urls import path
-from .views import article_list, article_detail
+from app_news.views import article_detail, article_share, article_comment, article_list, article_search
+from app_news.feeds import LatestArticleFeed
+
 
 app_name = 'news'
 
 urlpatterns = [
+    # path('', ArticleListView.as_view(), name='article_list'),
     path('', article_list, name='article_list'),
-    path('<int:year>/<int:month>/<int:day>/<slug:article_slg>', article_detail, name='article_detail'),
+    path('tag/<slug:tag_slug>/', article_list, name='article_list_by_tag'),
+    path(
+        '<int:year>/<int:month>/<int:day>/<slug:article_slg>/',
+        article_detail,
+        name='article_detail'
+    ),
+    path('<int:article_id>/share/', article_share, name='article_share'),
+    path('<int:article_id>/comment/', article_comment, name='article_comment'),
+    path('rss/', LatestArticleFeed(), name='article_rss'),
+    path('search/', article_search, name='article_search'),
 ]
